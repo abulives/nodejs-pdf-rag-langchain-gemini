@@ -1,4 +1,4 @@
-# 🚀 Build a PDF ingestion and Question/Answering system with LangChain and gemini
+# 🚀 Build a PDF ingestion and Question/Answering system with Nodejs, LangChain and gemini
 
 This is a Dockerized Node.js application built using the [Express.js](https://expressjs.com/) framework.
 
