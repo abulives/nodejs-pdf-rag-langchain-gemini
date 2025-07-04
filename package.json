@@ -1,0 +1,29 @@
+{
+  "name": "genai",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "npx kill-port 5000 && nodemon ./bin/www"
+  },
+  "dependencies": {
+    "@langchain/community": "^0.2.33",
+    "@langchain/core": "^0.2.36",
+    "@langchain/google-genai": "^0.0.26",
+    "@langchain/textsplitters": "^0.0.3",
+    "compression": "^1.8.0",
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "dotenv": "^17.0.1",
+    "express": "~4.16.1",
+    "helmet": "^8.1.0",
+    "hnswlib-node": "^3.0.0",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "langchain": "^0.2.16",
+    "morgan": "~1.9.1",
+    "multer": "^2.0.1",
+    "pdf-parse": "^1.1.1"
+  }
+}
