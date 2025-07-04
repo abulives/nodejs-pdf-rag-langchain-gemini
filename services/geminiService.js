@@ -1,6 +1,7 @@
 const fs = require('fs');
 require('dotenv').config();
 const pdfParse = require('pdf-parse');
+const { PDFLoader } = require('@langchain/community/document_loaders/fs/pdf');
 const { HNSWLib } = require("@langchain/community/vectorstores/hnswlib");
 const { RecursiveCharacterTextSplitter } = require('@langchain/textsplitters');
 const { ChatPromptTemplate } = require("@langchain/core/prompts");
@@ -19,26 +20,26 @@ const llm = new ChatGoogleGenerativeAI({
 
 const getPdfText = async (files) => {
     try {
-        let text = '';
+        const docs = [];
         for (const file of files) {
-            const dataBuffer = fs.readFileSync(file.path);
-            const pdfData = await pdfParse(dataBuffer);
-            text += pdfData.text;
+            const loader = new PDFLoader(file.path);
+            const fileDocs = await loader.load();
+            docs.push(...fileDocs);
         }
-        return text;
+        return docs;
     } catch (error) {
         throw error;
     }
 };
 
-const getTextChunks = async (text) => {
+const getTextChunks = async (docs) => {
     try {
         const splitter = new RecursiveCharacterTextSplitter({
             chunk_size: 10000,
             chunk_overlap: 1000,
         });
-        const chunks = await splitter.splitText(text);
-        return chunks; // list of strings
+        const splits = await splitter.splitDocuments(docs);
+        return splits; // list of strings
     } catch (error) {
         throw error;
     }
@@ -49,7 +50,7 @@ const getVectorStore = async (text_chunks) => {
         const texts = text_chunks;
         const metadata = texts.map((_, index) => ({ id: index + 1 }));
 
-        const vectorStore = await HNSWLib.fromTexts(text_chunks, metadata, embeddings);
+        const vectorStore = await HNSWLib.fromDocuments(text_chunks, embeddings);
         const vectorname = 'uploaded_vectors';
         await vectorStore.save(`vectors/${vectorname}`);
         return;
@@ -63,7 +64,6 @@ const getConversationalChain = async () => {
 
     return async ({ input_documents = [], question, vectorStore }) => {
         const context = input_documents.map(doc => doc.pageContent).join('\n');
-
         const messages = [
             ['system', `Answer the user's questions based on the below context:\n\n{context}, don't provide the wrong answer`],
             ["human", "{input}"]
