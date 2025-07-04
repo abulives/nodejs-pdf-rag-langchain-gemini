@@ -5,7 +5,7 @@ This is a Dockerized Node.js application built using the [Express.js](https://ex
 ## 📁 Folder Structure
 
 ```
-/your-app
+/app
 │
 ├── bin/              # Startup files or utilities
 ├── node_modules/     # Node.js dependencies
@@ -53,13 +53,13 @@ GOOGLE_API_KEY=gemini API KEY
 ### 3. Run Locally
 
 ```bash
-node app.js or npm start
+npm start
 ```
 
 Or with `nodemon`:
 
 ```bash
-npx nodemon app.js
+npm run dev
 ```
 
 ---
